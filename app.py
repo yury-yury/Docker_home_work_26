@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, jsonify, redirect
+from flask_migrate import Migrate
 import logging
 
+from config import Config
+from data_base import db
 from functions import get_post_all, get_post_by_pk, get_comments_by_post_id, search_for_posts, get_post_by_user
 from functions import get_list_dict, get_dict_data, search_by_tag, get_bookmarks_post, add_post_bookmarks
 from functions import remove_post_bookmarks
@@ -15,15 +18,24 @@ console_handler.setFormatter(formatter_one)
 logger_one.addHandler(console_handler)
 
 app = Flask(__name__)
+config = Config()
+app.config.from_object(config)
+
+app.url_map.strict_slashes = False
+app.app_context().push()
+
+db.init_app(app)
+
+migrate = Migrate(app, db)
 
 @app.route('/')
 def main_page():
     data = get_post_all()
-    return render_template('main.html', data = data)
+    return render_template('main.html', data=data)
 
 
 @app.route('/post/<int:postid>')
-def post_page(postid):
+def post_page(postid: int):
     post = get_post_by_pk(postid)
     data_comment = get_comments_by_post_id(postid)
     return render_template('post.html', data=post, comments=data_comment)
@@ -62,13 +74,13 @@ def bookmarks_page():
 @app.route('/bookmarks/add/<int:postid>')
 def bookmarks_add_page(postid):
     add_post_bookmarks(postid)
-    return redirect("/", code = 302)
+    return redirect("/", code=302)
 
 
 @app.route('/bookmarks/remove/<int:postid>')
 def bookmarks_remove_page(postid):
     remove_post_bookmarks(postid)
-    return redirect("/", code = 302)
+    return redirect("/", code=302)
 
 
 @app.route('/api/posts')
@@ -87,12 +99,12 @@ def api_posts_id(post_id):
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found():
     return render_template('404.html'), 404
 
 
 @app.errorhandler(500)
-def internal_error(error):
+def internal_error():
     return render_template('500.html'), 500
 
 

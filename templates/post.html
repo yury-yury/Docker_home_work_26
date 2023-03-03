@@ -32,10 +32,10 @@
               <span class="item__counter-text">{{data.views_count}}</span>
             </div>
           </div>
-            {% for dict_ in comments %}
+            {% for item in comments %}
           <div class="item__comments">
             <p class="item__comment">
-              <b>{{dict_['commenter_name']}}</b> {{dict_['comment']}}
+              <b>{{item.commenter_name}}</b> {{item.comment}}
             </p>
             </div>
             {% endfor %}

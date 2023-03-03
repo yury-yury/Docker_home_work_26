@@ -25,7 +25,7 @@
                 <img src="{{item.pic}}" width="348" class="item__post-img" alt="Картинка поста">
                 </a>
                 <p>
-                {{item.short_content|safe}}
+                {{item.content[ :48]|safe}}
                 </p>
             <div class="item__post-info">
             <p class="item__comments-counter">{{item.comment_count}} комментария</p>

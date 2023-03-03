@@ -1,6 +1,8 @@
 import json
 
-from class_post import Post
+
+from classes import Post, Comment
+from data_base import db
 
 
 def load_data():
@@ -8,16 +10,7 @@ def load_data():
     The function does not accept any arguments, and when called, loads data from an external json file,
     creates objects of the Post class and returns them as a list of objects.
     """
-    with open('data/posts.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-
-    list_post = []
-    for dict_ in data:
-        obj_post = Post(dict_['pk'], dict_['poster_name'], dict_['poster_avatar'], dict_['pic'], dict_['content'],
-                        dict_['views_count'], dict_['likes_count'], len(get_comments_by_post_id(dict_['pk'])))
-        list_post.append(obj_post)
-
-    return list_post
+    return db.session.query(Post).all()
 
 
 def get_dict_data(item):
@@ -124,21 +117,7 @@ def get_comments_by_post_id(post_id: int):
     on this post in an external database and returns the found comments as a list of dictionaries.
     If there is no such number or there are no comments to this post, it causes a ValueError error.
     """
-    with open('data/comments.json', 'r', encoding='utf-8') as file:
-        data = json.load(file)
-
-    res = []
-    for dict_ in data:
-        if dict_['post_id'] == post_id:
-            res.append(dict_)
-    try:
-        if res == []:
-            raise ValueError
-    except:
-        return []
-
-    return res
-
+    return db.session.query(Comment).filter(Comment.post_id == post_id).all()
 
 def add_post_bookmarks(id:int):
     """

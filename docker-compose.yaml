@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  app:
+    build: .
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+    environment:
+      - DB_USER = yury
+      - DB_PASSWORD = password
+      - DB_NAME = yury_db
+      - DB_HOST = db
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER = yury
+      - POSTGRES_PASSWORD = password
+      - POSTGRESS_DB = yury_db
+    ports:
+      - 5436:5432
