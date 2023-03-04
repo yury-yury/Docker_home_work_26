@@ -1,14 +1,14 @@
-import json
+
+"""import json
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-
+from config import Config
 
 app: Flask = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://yury:password@localhost:5432/yury_db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JSON_AS_ASCII'] = False
+config = Config()
+app.config.from_object(config)
 app.url_map.strict_slashes = False
 app.app_context().push()
 db = SQLAlchemy()
@@ -55,6 +55,7 @@ for dict_ in data:
 
 
 db.drop_all()
+
 db.create_all()
 
 with db.session.begin():
@@ -67,3 +68,4 @@ for item in data_post:
 
 db.session.add_all(list_post)
 db.session.commit()
+"""
