@@ -2,22 +2,56 @@ version: '3.3'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+    volumes:
+      - ./.env:/app/.env
     ports:
       - 5000:5000
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      migrations:
+       condition: service_completed_successfully
     environment:
-      - DB_USER = yury
-      - DB_PASSWORD = password
-      - DB_NAME = yury_db
-      - DB_HOST = db
+      DB_HOST: ${DB_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+  migrations:
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "python3 database_create.py "
+#      - /bin/bash
+#        - -c
+#        - |
+#          sleep 10
+#          python3 database_create.py
+
+    env_file:
+      - .env
+    #volumes:
+      #- ./.env:/app/.env
 
   db:
-    image: postgres
+    image: postgres:15.1-alpine
+    restart: on-failure
     environment:
-      - POSTGRES_USER = yury
-      - POSTGRES_PASSWORD = password
-      - POSTGRESS_DB = yury_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      #- pg_data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     ports:
-      - 5436:5432
+      - 5433:5433
+    healthcheck:
+      #test: pg_isready -U ${POSTGRES_USER} −d ${POSTGRES_DB}
+      test: ["CMD-SHELL", "pg_isready -U yury"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

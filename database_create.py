@@ -1,5 +1,4 @@
-
-"""import json
+import json
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -55,7 +54,6 @@ for dict_ in data:
 
 
 db.drop_all()
-
 db.create_all()
 
 with db.session.begin():
@@ -68,4 +66,3 @@ for item in data_post:
 
 db.session.add_all(list_post)
 db.session.commit()
-"""
