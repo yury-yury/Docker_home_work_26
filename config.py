@@ -1,9 +1,16 @@
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+
 class Config:
-    DB_NAME: str = 'postgres'
-    DB_USER: str = 'yury'
-    DB_PASSWORD: str = 'password'
-    DB_HOST: str = 'localhost'
-    DB_PORT: int = 5433
+    DB_NAME: str = os.getenv('DB_NAME')
+    DB_USER: str = os.getenv('DB_USER')
+    DB_PASSWORD: str = os.getenv('DB_PASSWORD')
+    DB_HOST: str = os.getenv('DB_HOST')
+    DB_PORT: int = 5432
     SQLALCHEMY_DATABASE_URI = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JSON_AS_ASCII = False
