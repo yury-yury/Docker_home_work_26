@@ -1,0 +1,44 @@
+version: '3.3'
+
+services:
+  app:
+    image: yuryyury/home_work_26:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    volumes:
+      - ./.env:/app/.env
+    ports:
+      - 5000:5000
+    depends_on:
+      db:
+        condition: service_healthy
+      migrations:
+       condition: service_completed_successfully
+    environment:
+      DB_HOST: $DB_HOST
+      DB_USER: $DB_USER
+      DB_PASSWORD: $DB_PASSWORD
+      DB_NAME: $DB_NAME
+
+  migrations:
+    image: yuryyury/home_work_26:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    volumes:
+      - ./.env:/app/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: flask db upgrade && python3 database_create.py
+
+  db:
+    image: postgres:15.1-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: on-failure
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
