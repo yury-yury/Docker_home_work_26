@@ -6,6 +6,7 @@ services:
       - .env
     build:
       context: .
+    image: yuryyury/home_work_26
     volumes:
       - ./.env:/app/.env
     ports:
@@ -27,6 +28,7 @@ services:
   migrations:
     build:
       context: .
+    image: yuryyury/home_work_26
     volumes:
       - ./.env:/app/.env
     depends_on:

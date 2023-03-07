@@ -9,4 +9,4 @@ RUN python3 -m pip install --no-cache -r requirements.txt
 
 COPY . .
 
-CMD python3 app.py
+CMD gunicorn -b 0.0.0.0:25000 app:app -w 4
