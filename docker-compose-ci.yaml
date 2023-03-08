@@ -2,9 +2,10 @@ version: '3.3'
 
 services:
   app:
-    image: yuryyury/home_work_26:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: yuryyury/home_work_26
     volumes:
       - ./.env:/app/.env
+      - ./config.py:/app/config.py
     ports:
       - 5000:5000
     depends_on:
@@ -19,9 +20,10 @@ services:
       DB_NAME: $DB_NAME
 
   migrations:
-    image: yuryyury/home_work_26:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: yuryyury/home_work_26
     volumes:
       - ./.env:/app/.env
+      - ./config.py:/app/config.py
     depends_on:
       db:
         condition: service_healthy
