@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "deploy/docker-compose.yaml,deploy/config.py"
-          target: "yury-yury"
+          target: "flask_app"
           strip_components: 1
       - name: run docker-compose
         uses: appleboy/ssh-action@master
@@ -44,4 +44,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            cd flask_app
             echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker-compose up -d
