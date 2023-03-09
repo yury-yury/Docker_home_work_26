@@ -46,7 +46,6 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     restart: on-failure
     volumes:
-      #- pg_data:/var/lib/postgresql/data
       - ./postgres-data:/var/lib/postgresql/data
     healthcheck:
       #test: pg_isready -U ${POSTGRES_USER} −d ${POSTGRES_DB}
