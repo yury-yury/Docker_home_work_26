@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   app:
-    image: yuryyury/home_work_26
+    image: yuryyury/home_work_26:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     volumes:
       - ./.env:/app/.env
       - ./config.py:/app/config.py
@@ -20,7 +20,7 @@ services:
       DB_NAME: $DB_NAME
 
   migrations:
-    image: yuryyury/home_work_26
+    image: yuryyury/home_work_26:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     volumes:
       - ./.env:/app/.env
       - ./config.py:/app/config.py
