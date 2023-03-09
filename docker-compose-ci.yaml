@@ -27,7 +27,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: flask db upgrade && python3 database_create.py
+    command: flask db upgrade
+    command: python3 database_create.py
 
   db:
     image: postgres:15.1-alpine
