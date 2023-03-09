@@ -29,13 +29,14 @@ jobs:
           mkdir deploy
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
           cat config.py | envsubst > deploy/config.py
+          cat .env > deploy/.env
       - name: clone files to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "deploy/docker-compose.yaml,deploy/config.py"
+          source: "deploy/docker-compose.yaml,deploy/config.py,deploy/.env"
           target: "flask_app"
           strip_components: 1
       - name: run docker-compose
